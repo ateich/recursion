@@ -4,8 +4,8 @@
 // but you don't so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
   // your code goes here
-  console.log("Should be", JSON.stringify(obj));
-
+  //console.log("Should be", JSON.stringify(obj));
+  console.log(obj);
   var toReturn = '';
 
   //String Case
@@ -18,10 +18,27 @@ var stringifyJSON = function(obj) {
   //Array Case
   if(typeof obj == 'array' || obj instanceof Array)
   {
+  	console.log("ARRAY");
   	if(obj.length > 0)
   	{
-  		toReturn += removeOutsideBrackets(stringifyJSON(obj.pop()));
-  		toReturn += removeOutsideBrackets(stringifyJSON(obj));
+  		var newArray = obj.slice(0);
+      var nextObj = newArray.shift();
+
+      //Do not remove brackets surrounding arrays
+      if(nextObj instanceof Array)
+      {
+  		  toReturn += stringifyJSON(nextObj);
+      }
+      else
+      {
+        toReturn += removeOutsideBrackets(stringifyJSON(nextObj));
+      }
+
+
+  		if(obj.length > 1){ toReturn += ",";}
+  		//console.log("Recurse upward to: ", obj);
+  		toReturn += removeOutsideBrackets(stringifyJSON(newArray));  		
+  		//console.log("Recurse upward to: ", obj);
   	}
 
   	console.log("Is ", '[' + toReturn + ']');
