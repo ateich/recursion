@@ -5,20 +5,17 @@
 var stringifyJSON = function(obj) {
   // your code goes here
   //console.log("Should be", JSON.stringify(obj));
-  console.log(obj);
   var toReturn = '';
 
   //String Case
   if(typeof obj == 'string' || obj instanceof String)
   {
-  	console.log("Is ", '"' + obj + '"');
-	return '"' + obj + '"';
+  	return '"' + obj + '"';
   }
 
   //Array Case
   if(typeof obj == 'array' || obj instanceof Array)
   {
-  	console.log("ARRAY");
   	if(obj.length > 0)
   	{
   		var newArray = obj.slice(0);
@@ -41,12 +38,31 @@ var stringifyJSON = function(obj) {
   		//console.log("Recurse upward to: ", obj);
   	}
 
-  	console.log("Is ", '[' + toReturn + ']');
   	return '[' + toReturn + ']';
   }
 
+  if(obj instanceof Object)
+  {
+    for(var key in obj)
+    {
+      if(obj.hasOwnProperty(key))
+      {
+        if(typeof obj[key]  === 'function' || typeof obj[key] === 'undefined')
+        {
+          //INVALID ENTRIES, ADD NOTHING
+        }
+        else
+        {
+          toReturn += '"'+ key + '":' + stringifyJSON(obj[key]) + ',';
+        }
+      }
+    }
+
+    toReturn = toReturn.replace(/,$/, '');;
+    return "{" + toReturn + "}";
+  }
+
   //DEFAULT
-  console.log("Is ", '' + obj);
   return '' + obj;
 
   function removeOutsideBrackets(string)
