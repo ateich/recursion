@@ -5,8 +5,6 @@
 
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className){
-  
-  console.log(document.getElementsByClassName(className));
 
   var children = document.body.childNodes;
   var matchingNodes = new Array();
@@ -18,13 +16,8 @@ var getElementsByClassName = function(className){
 
   for(var i=0; i<children.length; i++)
   {
-  	var result = getElementsByClassNameInNode(className, children.item(i));
-  	if(result)
-  	{
-  		matchingNodes.push(result);
-  	}
+  	getElementsByClassNameInNode(className, children.item(i));
   }
-  console.log(matchingNodes);
   return matchingNodes;
 
   function hasClasses(className, node)
@@ -60,15 +53,15 @@ var getElementsByClassName = function(className){
   	//Element
   	if(node.nodeType == 1)
   	{
-  		console.log("Element: ", node);
+  		//Check for child elements
+  		for(var i=0; i<node.childNodes.length; i++)
+  		{
+  			getElementsByClassNameInNode(className, node.childNodes.item(i));
+  		}
   		//Check if Element has Classes
   		if(hasClasses(className, node))
   		{
-  			return node;
-  		}
-  		else
-  		{
-  			return false;
+  			matchingNodes.push(node);
   		}
   	}  	
   }
